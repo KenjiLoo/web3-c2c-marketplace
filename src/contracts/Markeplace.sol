@@ -36,9 +36,12 @@ contract Marketplace{
     }
 
     //vars: _name is for product name, _price is for product price in wei
+    //underscore vars is for local vars, non underscored are state vars
     function createProduct(string memory _name, uint _price) public{
-        //make sure parameters are correct
-        
+        //make sure parameters (name, price) are correct
+        require(bytes(_name).length > 0);
+        require(_price > 0);
+
         //increment productCount
         productCount ++;
 

@@ -1,6 +1,9 @@
 //test file for marketplace smart contract
 
-const { assert } = require("chai")
+//require chai dependency
+require('chai')
+    .use(require('chai-as-promised'))
+    .should()
 
 //import smart contract
 const Marketplace = artifacts.require('./Marketplace.sol')
@@ -60,6 +63,11 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             assert.equal(event.price,'1000000000000000000' ,'price is correct :D')
             assert.equal(event.owner,seller ,'owner is correct')
             assert.equal(event.purchased,false ,'pruchasing state is correct')
+
+            //check product info if fail
+            await await marketplace.createProduct('', web3.utils.toWei('1', 'Ether'), {from: seller}).should.be.rejected;
+            await await marketplace.createProduct('Iphone',0, {from: seller}).should.be.rejected;
+
         })
 
     })
