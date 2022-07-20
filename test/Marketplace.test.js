@@ -40,7 +40,7 @@ contract('Marketplace', (accounts) => {
         let result, productCount
 
         before(async () => {
-            result = await marketplace.createProduct()
+            result = await marketplace.createProduct('Iphone', web3.utils.toWei('1', 'Ether')) //price value is stored in wei
             productCount = await marketplace.productCount()
         })
 

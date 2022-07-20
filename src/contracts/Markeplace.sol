@@ -26,13 +26,17 @@ contract Marketplace{
         name = "Web3 C2C Marketplace";
     }
 
-    function createProduct() public{
+    //vars: _name is for product name, _price is for product price in wei
+    function createProduct(string memory _name, uint _price) public{
         //make sure parameters are correct
         
-        //create product
-
         //increment productCount
         productCount ++;
+
+        //create product
+        //stores the product with it's relevant info into products array
+        //msg.sender is the address of owner
+        products[productCount] = Product(productCount, _name, _price, msg.sender, false);
 
         //trigger an event
     }
