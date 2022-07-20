@@ -5,7 +5,7 @@ const { assert } = require("chai")
 //import smart contract
 const Marketplace = artifacts.require('./Marketplace.sol')
 
-contract('Marketplace', (accounts) => {
+contract('Marketplace', ([deployer, seller, buyer]) => {
     let marketplace
 
     // happens in truffle console
@@ -40,7 +40,7 @@ contract('Marketplace', (accounts) => {
         let result, productCount
 
         before(async () => {
-            result = await marketplace.createProduct('Iphone', web3.utils.toWei('1', 'Ether')) //price value is stored in wei
+            result = await marketplace.createProduct('Iphone', web3.utils.toWei('1', 'Ether'), {from: seller}) //price value is stored in wei
             productCount = await marketplace.productCount()
         })
 
@@ -49,6 +49,17 @@ contract('Marketplace', (accounts) => {
             
             //check product count
             assert.equal(productCount, 1)
+
+            //log the added product
+            // console.log(result.logs)
+
+            //check product info is correct
+            const event = result.logs[0].args
+            assert.equal(event.id.toNumber(), productCount.toNumber(), 'ID is correct :D')
+            assert.equal(event.name,'Iphone' ,'Name is correct :D')
+            assert.equal(event.price,'1000000000000000000' ,'price is correct :D')
+            assert.equal(event.owner,seller ,'owner is correct')
+            assert.equal(event.purchased,false ,'pruchasing state is correct')
         })
 
     })

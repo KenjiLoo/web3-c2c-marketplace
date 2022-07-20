@@ -22,6 +22,15 @@ contract Marketplace{
         bool purchased;
     }
     
+    //event to check the product info in logs
+    event ProductCreated(
+        uint id,
+        string name,
+        uint price,
+        address owner,
+        bool purchased
+    );
+
     constructor() public{
         name = "Web3 C2C Marketplace";
     }
@@ -39,5 +48,6 @@ contract Marketplace{
         products[productCount] = Product(productCount, _name, _price, msg.sender, false);
 
         //trigger an event
+        emit ProductCreated(productCount, _name, _price, msg.sender, false);
     }
 }
