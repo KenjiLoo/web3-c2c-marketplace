@@ -1,5 +1,7 @@
 //test file for marketplace smart contract
 
+const { assert } = require('chai')
+
 //require chai dependency
 require('chai')
     .use(require('chai-as-promised'))
@@ -62,7 +64,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             assert.equal(event.name,'Iphone' ,'Name is correct :D')
             assert.equal(event.price,'1000000000000000000' ,'price is correct :D')
             assert.equal(event.owner,seller ,'owner is correct')
-            assert.equal(event.purchased,false ,'pruchasing state is correct')
+            assert.equal(event.purchased,false ,'purchasing state is correct')
 
             //check product info if fail
             await await marketplace.createProduct('', web3.utils.toWei('1', 'Ether'), {from: seller}).should.be.rejected;
@@ -70,6 +72,52 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
 
         })
 
+        //checks if product info is listed properly
+        it('Lists Products :D', async () =>{
+            const product = await marketplace.products(productCount)
+            
+            assert.equal(product.id.toNumber(), productCount.toNumber(), 'ID is correct :D')
+            assert.equal(product.name,'Iphone' ,'Name is correct :D')
+            assert.equal(product.price,'1000000000000000000' ,'price is correct :D')
+            assert.equal(product.owner,seller ,'owner is correct')
+            assert.equal(product.purchased,false ,'pruchasing state is correct')
+
+        })
+
+        //checks if product is sellable
+        it('Sells Products :D', async () =>{
+            //track seller balance before purchase 
+            let oldSellerBalance
+            oldSellerBalance = await web3.eth.getBalance(seller)
+            oldSellerBalance = new web3.utils.BN(oldSellerBalance)
+            
+            //SUCCESS: buyer makes purchase
+            result = await marketplace.purchaseProduct(productCount, {from: buyer, value: web3.utils.toWei('1', 'Ether')})
+
+            //check product info is correct
+            const event = result.logs[0].args
+            assert.equal(event.id.toNumber(), productCount.toNumber(), 'ID is correct :D')
+            assert.equal(event.name,'Iphone' ,'Name is correct :D')
+            assert.equal(event.price,'1000000000000000000' ,'price is correct :D')
+            assert.equal(event.owner, buyer ,'owner is correct')
+            assert.equal(event.purchased, true ,'pruchasing state is correct')
+
+            //check that seller has received funds
+            let newSellerBalance
+            newSellerBalance = await web3.eth.getBalance(seller)
+            newSellerBalance = new web3.utils.BN(newSellerBalance)
+
+            let price 
+            price = web3.utils.toWei('1', 'Ether')
+            price = new web3.utils.BN(price)
+
+            // console.log(oldSellerBalance, newSellerBalance, price)
+            
+            const expectedBalance = oldSellerBalance.add(price)
+            
+            //test to see if new and expected balance are equal
+            assert.equal(newSellerBalance.toString(), expectedBalance.toString())
+        })
     })
 
 })

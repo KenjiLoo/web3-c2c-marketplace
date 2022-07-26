@@ -18,7 +18,7 @@ contract Marketplace{
         uint id;
         string name;
         uint price; 
-        address owner;
+        address payable owner;
         bool purchased;
     }
     
@@ -27,7 +27,16 @@ contract Marketplace{
         uint id,
         string name,
         uint price,
-        address owner,
+        address payable owner,
+        bool purchased
+    );
+
+    //event to check the puchased product info in logs
+    event ProductPurchased(
+        uint id,
+        string name,
+        uint price,
+        address payable owner,
         bool purchased
     );
 
@@ -52,5 +61,29 @@ contract Marketplace{
 
         //trigger an event
         emit ProductCreated(productCount, _name, _price, msg.sender, false);
+    }
+
+    function purchaseProduct(uint _id) public payable{
+        //fetch product
+        Product memory _product = products[_id];
+
+        //fetch owner
+        address payable _seller = _product.owner;
+        
+        //make sure product is purchasable
+        //transfer ownership to buyer
+        _product.owner = msg.sender;
+
+        //mark as purchased
+        _product.purchased = true;
+
+        //xupdate the product
+        products[_id] = _product;
+
+        //paythe seller by sendng them eth
+        address(_seller).transfer(msg.value);
+
+        //trigger an event
+        emit ProductPurchased(productCount, _product.name, _product.price, msg.sender, true);
     }
 }
