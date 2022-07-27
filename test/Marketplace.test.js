@@ -117,6 +117,17 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             
             //test to see if new and expected balance are equal
             assert.equal(newSellerBalance.toString(), expectedBalance.toString())
+        
+            //FAILURE: tries t o buy product that deosnt exist (invalid id)
+            await marketplace.purchaseProduct(99, {from: buyer, value: web3.utils.toWei('1', 'Ether')}).should.be.rejected;
+            //FAILURE: too less money
+            await marketplace.purchaseProduct(productCount, {from: buyer, value: web3.utils.toWei('0.5', 'Ether')}).should.be.rejected;
+            //FAILURE: purchased buy seller
+            await marketplace.purchaseProduct(productCount, {from: deployer, value: web3.utils.toWei('1', 'Ether')}).should.be.rejected;
+            //FAILURE: purchased twice
+            await marketplace.purchaseProduct(productCount, {from: buyer, value: web3.utils.toWei('1', 'Ether')}).should.be.rejected;
+
+
         })
     })
 

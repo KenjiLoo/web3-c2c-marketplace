@@ -57,7 +57,7 @@ contract Marketplace{
         //create product
         //stores the product with it's relevant info into products array
         //msg.sender is the address of owner
-        products[productCount] = Product(productCount, _name, _price, msg.sender, false);
+        products[productCount] = Product(productCount, _name, _price, msg.sender , false);
 
         //trigger an event
         emit ProductCreated(productCount, _name, _price, msg.sender, false);
@@ -69,6 +69,18 @@ contract Marketplace{
 
         //fetch owner
         address payable _seller = _product.owner;
+
+        //make sure the product has a valid id 
+        require(_product.id > 0 && _product.id <= productCount);
+
+        //require that there is enough Ether in the transaction 
+        require(msg.value >= _product.price);
+
+        //require that the product has not been purchased 
+        require(!_product.purchased);
+
+        //require that the seller is not the buyer 
+        require(_seller != msg.sender);
         
         //make sure product is purchasable
         //transfer ownership to buyer
@@ -80,7 +92,7 @@ contract Marketplace{
         //xupdate the product
         products[_id] = _product;
 
-        //paythe seller by sendng them eth
+        //pay the seller by sendng them eth
         address(_seller).transfer(msg.value);
 
         //trigger an event
