@@ -63,6 +63,7 @@ contract Marketplace{
         emit ProductCreated(productCount, _name, _price, msg.sender, false);
     }
 
+    //ignore payable type errors
     function purchaseProduct(uint _id) public payable{
         //fetch product
         Product memory _product = products[_id];
