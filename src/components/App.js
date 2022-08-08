@@ -71,8 +71,16 @@ class App extends Component {
       const marketplace = web3.eth.Contract(Marketplace.abi,networkData.address)
       this.setState({marketplace}) //loads the smart contract in
       const productCount = await marketplace.methods.productCount().call()
-      console.log(productCount.toString())
-      console.log("hi")
+      this.setState({ productCount })
+
+      //load products
+      //REMINDER!! marketplace is the smart constract, marketplace.methods.function() is calling the methods in the smart contract
+      for(var i = 1; i <= productCount; i++){
+        const product = await marketplace.methods.products(i).call()
+        this.setState({
+          products: [...this.state.products, product]
+        })
+      }
       this.setState({loading: false})
     } else{
       window.alert("Marketplace contract not deployed to detected network")
@@ -114,7 +122,10 @@ class App extends Component {
                 ? <div id="loader" className="text-center">
                     <p className="text-center">Loading...</p>
                   </div> 
-                : <Main createProduct={this.createProduct}/> 
+                : <Main 
+                    products={this.state.products} 
+                    createProduct={this.createProduct}
+                  /> 
               }
             </main>
           </div>

@@ -47,27 +47,18 @@ class Main extends Component {
                         </tr>
                     </thead>
                     <tbody id="productList">
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>iPhone x</td>
-                            <td>1 Eth</td>
-                            <td>0x39C7BC5496f4eaaa1ff75d88E079C22f0519E7b9</td>
-                            <td><button className="buyButton">Buy</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Macbook Pro</td>
-                            <td>3 eth</td>
-                            <td>0x39C7BC5496f4eaaa1ff75d88E079C22f0519E7b9</td>
-                            <td><button className="buyButton">Buy</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Airpods</td>
-                            <td>0.5 eth</td>
-                            0x306706540664caaa16f75d995070622605105760
-                            <td><button className="buyButton">Buy</button></td>
-                        </tr>
+                        {/* loop through all products to display */}
+                        {this.props.products.map((product, key) => {
+                            return(
+                                <tr key={key}>
+                                    <th scope="row">{product.id.toString()}</th>
+                                    <td>{product.name}</td>
+                                    <td>{window.web3.utils.fromWei(product.price.toString(), 'Ether')} ETH</td>
+                                    <td>{product.owner}</td>
+                                    <td><button className="buyButton">Buy</button></td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                  </table>
             </div>
