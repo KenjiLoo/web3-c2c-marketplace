@@ -98,6 +98,7 @@ class App extends Component {
 
     //bind the function to components **CRITICAL
     this.createProduct = this.createProduct.bind(this)
+    this.purchaseProduct = this.purchaseProduct.bind(this)
   }
   
   //to create products
@@ -106,6 +107,17 @@ class App extends Component {
 
     //calls the smart contract from state
     this.state.marketplace.methods.createProduct(name, price).send({ from: this.state.account })
+      .once('receipt', (receipt)=>{
+        this.setState({ loading: false })
+      })
+  }
+
+  //to purchase products
+  purchaseProduct(id, price){
+    this.setState({ loading: true })
+
+    //calls the smart contract from state
+    this.state.marketplace.methods.purchaseProduct(id).send({ from: this.state.account, value: price })
       .once('receipt', (receipt)=>{
         this.setState({ loading: false })
       })
@@ -124,7 +136,9 @@ class App extends Component {
                   </div> 
                 : <Main 
                     products={this.state.products} 
+                    // these 2 binds are defined in the contructor
                     createProduct={this.createProduct}
+                    purchaseProduct={this.purchaseProduct}
                   /> 
               }
             </main>
