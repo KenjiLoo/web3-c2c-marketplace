@@ -69,7 +69,10 @@ class App extends Component {
     const networkData = Marketplace.networks[networkId]
     if(networkData){
       const marketplace = web3.eth.Contract(Marketplace.abi,networkData.address)
-      this.setState({marketplace})
+      this.setState({marketplace}) //loads the smart contract in
+      const productCount = await marketplace.methods.productCount().call()
+      console.log(productCount.toString())
+      console.log("hi")
       this.setState({loading: false})
     } else{
       window.alert("Marketplace contract not deployed to detected network")
@@ -84,6 +87,20 @@ class App extends Component {
       products: [],
       loading: true
     }
+
+    //bind the function to components **CRITICAL
+    this.createProduct = this.createProduct.bind(this)
+  }
+  
+  //to create products
+  createProduct(name, price){
+    this.setState({ loading: true })
+
+    //calls the smart contract from state
+    this.state.marketplace.methods.createProduct(name, price).send({ from: this.state.account })
+      .once('receipt', (receipt)=>{
+        this.setState({ loading: false })
+      })
   }
 
   render() {
@@ -93,7 +110,12 @@ class App extends Component {
         <div className="container-fluid mt-5">
           <div className="row">
             <main role="main" className="col-lg-12 d-flex">
-              {this.state.loading ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div> : <Main /> }
+              { this.state.loading 
+                ? <div id="loader" className="text-center">
+                    <p className="text-center">Loading...</p>
+                  </div> 
+                : <Main createProduct={this.createProduct}/> 
+              }
             </main>
           </div>
         </div>

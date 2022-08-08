@@ -6,11 +6,18 @@ class Main extends Component {
         return (
             <div id="content">
                 <h1>Add Product</h1>
-                <form> 
+                <form onSubmit={(event)=>{
+                    event.preventDefault()
+                    //function is from App.js
+                    const name = this.productName.value
+                    const price = window.web3.utils.toWei(this.productPrice.value.toString(), 'Ether') //convert numbers to Wei
+                    this.props.createProduct(name, price)
+                }}> 
                     <div className="form-group mr-sm-2">
                         <input
                             id="productName"
                             type="text"
+                            ref={(input) => {this.productName = input}}
                             className="form-control"
                             placeholder="Product Name"
                             required/>
@@ -19,8 +26,9 @@ class Main extends Component {
                         <input
                             id="productPrice"
                             type="text"
+                            ref={(input) => {this.productPrice = input}}
                             className="form-control"
-                            placeholder="PRoduct Price"
+                            placeholder="Product Price"
                             required />
                         
                     </div>
