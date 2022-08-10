@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import logo from '../logo.png';
+// import logo from '../logo.png';
 import './App.css';
 import Marketplace from '../abis/Marketplace.json'
 import Navbar from './Navbar'
@@ -15,7 +15,7 @@ class App extends Component {
     console.log("loaded web3 connection")
   }
 
-  //connect to web3 with this function  with web3.js and metamask
+  //connect to web3 with this function with web3.js and metamask
   async loadWeb3(){
     
     //specially cooked code for this specific dapp
