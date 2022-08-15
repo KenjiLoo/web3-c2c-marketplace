@@ -27,7 +27,7 @@ class App extends Component {
       window.web3 = new Web3(window.web3.currentProvider)
     }
     else{ 
-      window.alert("Non-Ethereum browser detected. You should use another browser. Try Google Chrome, Firefox, Brave, and more...")
+      window.alert("Non-Ethereum browser detected. Try Google Chrome, Firefox, Brave, and more...")
     }
 
     //THIS CODE SNIPPET BELOW IS THE GENERIC CONNECTOR TO WEB3, it's put here for reference

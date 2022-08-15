@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 class Main extends Component {
 
@@ -36,45 +38,39 @@ class Main extends Component {
                  </form>
                  <p> &nbsp; </p>
                  <h2>Buy Product</h2>
-                 <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Owner</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="productList">
-                        {/* loop through all products to display */}
-                        {this.props.products.map((product, key) => {
-                            return(
-                                <tr key={key}>
-                                    <th scope="row">{product.id.toString()}</th>
-                                    <td>{product.name}</td>
-                                    <td>{window.web3.utils.fromWei(product.price.toString(), 'Ether')} ETH</td>
-                                    <td>{product.owner}</td>
-                                    <td>
-                                        { !product.purchased 
-                                            ?<button 
-                                                className="buyButton" 
-                                                name={product.id}
-                                                value={product.price}
-                                                onClick={(event)=>{
-                                                    this.props.purchaseProduct(event.target.name, event.target.value)
-                                                }}
-                                            >Buy</button>
-                                            :null
-                                        }
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                 </table>
+                 
+
+                 {this.props.products.map((product, key) => {
+                    return(
+                        <Card key={key} style={{ width: '18rem' }}>
+                            <Card.Body >
+                                <Card.Title>{product.name}</Card.Title>
+                                <Card.Text>
+                                    Price: {window.web3.utils.fromWei(product.price.toString(), 'Ether')} ETH
+                                </Card.Text>
+                                <Card.Text>
+                                    Owner: {product.owner}
+                                </Card.Text>
+                                { !product.purchased 
+                                    ?<button 
+                                        className="buyButton" 
+                                        name={product.id}
+                                        value={product.price}
+                                        onClick={(event)=>{
+                                            this.props.purchaseProduct(event.target.name, event.target.value)
+                                        }}
+                                    >Buy</button>
+                                    :null
+                                }
+                                
+                            </Card.Body>
+                        </Card>
+                    )
+                })}
+                 
             </div>
-        );
+            
+        )
     }
 }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Web3 from 'web3';
 
 class Navbar extends Component {
 
@@ -22,6 +23,18 @@ class Navbar extends Component {
                     </small>
                     </li>
                 </ul>
+
+                {/* connect to wallet button */}
+                {/* <button 
+                    id="connect-button"
+                    onClick={(event)=>{
+                       console.log(this.props.account)
+                       
+                    }}
+                >
+                    Connect Metamask
+                </button> */}
+                    
             </nav>
             
         );
