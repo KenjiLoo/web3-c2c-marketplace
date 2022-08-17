@@ -52,14 +52,14 @@ class Main extends Component {
                                     Owner: {product.owner}
                                 </Card.Text>
                                 { !product.purchased 
-                                    ?<button 
+                                    ?<Button 
                                         className="buyButton" 
                                         name={product.id}
                                         value={product.price}
                                         onClick={(event)=>{
                                             this.props.purchaseProduct(event.target.name, event.target.value)
                                         }}
-                                    >Buy</button>
+                                    >Buy</Button>
                                     :null
                                 }
                                 
